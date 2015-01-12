@@ -29,7 +29,7 @@ function get_request_headers() {
 }
 
 $headers = get_request_headers();
-if (empty($headers['DISABLE_CORS'])) {
+if (empty($headers['DISABLE_CORS']) && empty($_REQUEST['DISABLE_CORS'])) {
 	header("Access-Control-Allow-Origin: *");
 }
 $data = array();
