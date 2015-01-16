@@ -34,7 +34,27 @@ if (empty($headers['DISABLE_CORS']) && empty($_REQUEST['DISABLE_CORS'])) {
 }
 $data = array();
 $data['request_method'] = $_SERVER['REQUEST_METHOD'];
+
+if (!empty($_REQUEST['timeout']) && intval($_REQUEST['timeout']) == $_REQUEST['timeout'] && $_REQUEST['timeout'] > 0) {
+	sleep($_REQUEST['timeout']);
+	$data['timeout'] = $_REQUEST['timeout'];
+}
+
+if (!empty($_REQUEST['data_size']) && intval($_REQUEST['data_size']) == $_REQUEST['data_size'] && $_REQUEST['data_size'] > 0) {
+	header('Content-Type: application/octet-stream');
+	header('Content-Transfer-Encoding: Binary'); 
+	header('Content-disposition: attachment; filename="' . microtime(TRUE) . '.dat"');
+	$length = intval($_REQUEST['data_size']);
+	$array = '';
+	while (--$length) {
+		echo chr(rand(0, 100));
+	}
+	die();
+}
+
 $datatype = !empty($_REQUEST['data_type']) ? $_REQUEST['data_type'] : 'json';
+
+
 switch($datatype) {
 	case 'json':
 	default:
