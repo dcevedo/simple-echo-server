@@ -41,9 +41,14 @@ if (!empty($_REQUEST['timeout']) && intval($_REQUEST['timeout']) == $_REQUEST['t
 }
 
 if (!empty($_REQUEST['data_size']) && intval($_REQUEST['data_size']) == $_REQUEST['data_size'] && $_REQUEST['data_size'] > 0) {
-	header('Content-Type: application/octet-stream');
-	header('Content-Transfer-Encoding: Binary'); 
-	header('Content-disposition: attachment; filename="' . microtime(TRUE) . '.dat"');
+	if (empty($_REQUEST['data_type'])) {
+		header('Content-Type: application/octet-stream');
+		header('Content-Transfer-Encoding: Binary'); 
+		header('Content-disposition: attachment; filename="' . microtime(TRUE) . '.dat"');
+	} else {
+		header('Content-Type: image/' . $_REQUEST['data_type']);
+	}
+	
 	$length = intval($_REQUEST['data_size']);
 	$array = '';
 	while (--$length) {
