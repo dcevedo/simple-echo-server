@@ -41,20 +41,31 @@ if (!empty($_REQUEST['timeout']) && intval($_REQUEST['timeout']) == $_REQUEST['t
 }
 
 if (!empty($_REQUEST['data_size']) && intval($_REQUEST['data_size']) == $_REQUEST['data_size'] && $_REQUEST['data_size'] > 0) {
-	if (empty($_REQUEST['data_type'])) {
-		header('Content-Type: application/octet-stream');
-		header('Content-Transfer-Encoding: Binary'); 
-		header('Content-disposition: attachment; filename="' . microtime(TRUE) . '.dat"');
-	} else {
-		header('Content-Type: image/' . $_REQUEST['data_type']);
-	}
 	
 	$length = intval($_REQUEST['data_size']);
-	$array = '';
+	$array = array();
 	while (--$length) {
-		echo chr(rand(0, 100));
+		$array[] = chr(rand(0, 100));
 	}
-	die();
+	if (!empty($_REQUEST['data_type'])) {
+		switch($_REQUEST['data_type']) {
+			case 'jpg':
+			case 'png':
+			case 'gif':
+				header('Content-Type: image/' . $_REQUEST['data_type']);
+				break;
+			default:
+				header('Content-Type: application/octet-stream');
+				header('Content-Transfer-Encoding: Binary'); 
+				header('Content-disposition: attachment; filename="' . microtime(TRUE) . '.' . $_REQUEST['data_type'] . '"');
+				break;
+		} 
+
+		echo $array;
+		die();
+	} else {
+		$data['data'] = $array;
+	}
 }
 
 $datatype = !empty($_REQUEST['data_type']) ? $_REQUEST['data_type'] : 'json';
