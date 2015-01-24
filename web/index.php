@@ -40,6 +40,9 @@ if (!empty($_REQUEST['timeout']) && intval($_REQUEST['timeout']) == $_REQUEST['t
 	$data['timeout'] = $_REQUEST['timeout'];
 }
 
+
+//Allow data size to be set. An array with data_size random values will be included in the output.
+//If data_type is set, it is assumed that the server should return the random values as if it were a file
 if (!empty($_REQUEST['data_size']) && intval($_REQUEST['data_size']) == $_REQUEST['data_size'] && $_REQUEST['data_size'] > 0) {
 	
 	$length = intval($_REQUEST['data_size']);
