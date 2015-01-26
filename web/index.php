@@ -34,6 +34,7 @@ if (empty($headers['DISABLE_CORS']) && empty($_REQUEST['DISABLE_CORS'])) {
 }
 $data = array();
 $data['request_method'] = $_SERVER['REQUEST_METHOD'];
+$data['request_parameters'] = $_REQUEST;
 
 if (!empty($_REQUEST['timeout']) && intval($_REQUEST['timeout']) == $_REQUEST['timeout'] && $_REQUEST['timeout'] > 0) {
 	sleep($_REQUEST['timeout']);
