@@ -30,7 +30,21 @@ function get_request_headers() {
 
 $headers = get_request_headers();
 if (empty($headers['DISABLE_CORS']) && empty($_REQUEST['DISABLE_CORS'])) {
-	header("Access-Control-Allow-Origin: *");
+	if (isset($_SERVER['HTTP_ORIGIN']) && !headers_sent()) {
+		header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+		header('Access-Control-Allow-Credentials: true');
+		//header('Access-Control-Max-Age: 86400');    // cache for 1 day
+	}
+	// Access-Control headers are received during OPTIONS requests
+	if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS' && !headers_sent()) {
+		if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) {
+			header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+		}
+
+		if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'])) {
+			header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+		}
+	}
 }
 $data = array();
 $data['request_method'] = $_SERVER['REQUEST_METHOD'];
